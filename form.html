@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Bilgi Formu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group input[type="radio"] {
+            width: auto;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .form-group .error {
+            display: block;
+            margin-top: 5px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Kullanıcı Bilgi Formu</h2>
+        <form id="userForm" action="process_form.php" method="POST" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="firstName">İsim:</label>
+                <input type="text" id="firstName" name="firstName">
+                <span class="error" id="firstNameError"></span>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Soyisim:</label>
+                <input type="text" id="lastName" name="lastName">
+                <span class="error" id="lastNameError"></span>
+            </div>
+            <div class="form-group">
+                <label for="email">E-posta adresi:</label>
+                <input type="email" id="email" name="email">
+                <span class="error" id="emailError"></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Şifre:</label>
+                <input type="password" id="password" name="password">
+                <span class="error" id="passwordError"></span>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Doğum Tarihi:</label>
+                <input type="date" id="birthDate" name="birthDate">
+                <span class="error" id="birthDateError"></span>
+            </div>
+            <div class="form-group">
+                <label>Cinsiyet:</label>
+                <input type="radio" id="male" name="gender" value="male">
+                <label for="male">Erkek</label>
+                <input type="radio" id="female" name="gender" value="female">
+                <label for="female">Kadın</label>
+                <span class="error" id="genderError"></span>
+            </div>
+            <div class="button-container">
+                <button type="submit">Gönder</button>
+                <button type="button" onclick="window.location.href='list_users.php'">Kullanıcıları Listele</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Clear previous error messages
+            document.getElementById('firstNameError').textContent = '';
+            document.getElementById('lastNameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('birthDateError').textContent = '';
+            document.getElementById('genderError').textContent = '';
+
+            // Get form values
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const birthDate = document.getElementById('birthDate').value.trim();
+            const gender = document.querySelector('input[name="gender"]:checked');
+
+            let valid = true;
+
+            // Validate first name
+            if (!firstName) {
+                document.getElementById('firstNameError').textContent = 'İsim gerekli';
+                valid = false;
+            }
+
+            // Validate last name
+            if (!lastName) {
+                document.getElementById('lastNameError').textContent = 'Soyisim gerekli';
+                valid = false;
+            }
+
+            // Validate email
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!email) {
+                document.getElementById('emailError').textContent = 'E-posta gerekli';
+                valid = false;
+            } else if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Geçersiz e-posta formatı';
+                valid = false;
+            }
+
+            // Validate password
+            if (!password) {
+                document.getElementById('passwordError').textContent = 'Şifre gerekli';
+                valid = false;
+            } else if (password.length < 6) {
+                document.getElementById('passwordError').textContent = 'Şifre en az 6 karakter olmalı';
+                valid = false;
+            }
+
+            // Validate birth date
+            if (!birthDate) {
+                document.getElementById('birthDateError').textContent = 'Doğum tarihi gerekli';
+                valid = false;
+            }
+
+            // Validate gender
+            if (!gender) {
+                document.getElementById('genderError').textContent = 'Cinsiyet seçilmeli';
+                valid = false;
+            }
+
+            return valid;
+        }
+    </script>
+</body>
+</html>
